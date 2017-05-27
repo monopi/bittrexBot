@@ -2,10 +2,12 @@
 This is an experimental bot for trading against the bittrex exchange
 
 #DISCLAIMER
+
 ###I am not responsible for anything done with this bot. You use it at your own risk. There are no warranties or guarantees expressed or implied. You assume all responsibility and liability.
 
 
 ##Flow
+
 The bot walks through the following:
 
 * Checks for the existence of any orders in your orderbook. If both a buy and sell exist the flow ends and the bot will wait for the next cycle. 
@@ -16,6 +18,7 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
 * Place a new order set with the volume percentage configured
 
 ##Configuration
+
 ####Note: An api key will need to be created with "Trade Market" permissions
 
 * apiKey - api key
