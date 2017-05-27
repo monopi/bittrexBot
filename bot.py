@@ -84,7 +84,7 @@ def get_last_order_value(market):
     return lastOrder[0]['PricePerUnit']
 
 def calculate_sell_order_value(orderHistory, valuePercent):
-    newSellValue = round(((orderHistory * (valuePercent * .01)) / 2) + orderHistory, 8)
+    newSellValue = round((orderHistory * (valuePercent * .01)) + orderHistory, 8)
     return newSellValue
 
 def calculate_sell_order_volume(orderVolume, volumePercent):
@@ -92,7 +92,7 @@ def calculate_sell_order_volume(orderVolume, volumePercent):
     return newSellVolume
 
 def calculate_buy_order_value(orderValueHistory, valuePercent):
-    newBuyValue = round((orderValueHistory - (orderValueHistory * (valuePercent * .01)) / 2), 8)
+    newBuyValue = round(orderValueHistory - (orderValueHistory * (valuePercent * .01)), 8)
     return newBuyValue
 
 def calculate_buy_order_volume(orderVolume, volumePercent):
