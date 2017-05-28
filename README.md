@@ -31,6 +31,8 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
 * extCoinBalance - off exchange token count
 * checkInterval - how often the bot will check for orders
 
+#### Note on Bittrex Transactions: If the transaction is less than .0005 sat, bittrex will ignore the order. So if you have a low volume of cheap tokens you'll have to leverage more volume.
+
 #### Example file 
 
 ```json
