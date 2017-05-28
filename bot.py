@@ -2,7 +2,8 @@
 __author__ = 'zaphodbeeblebrox'
 
 # TODO
-# add the accrual percentage
+# add the buy percentage
+# add an initial market check
 # figure out how the hell Wilde's assessing volume
 # note the code
 # make it more readable
@@ -20,7 +21,8 @@ apiKey = str(config['apiKey'])
 apiSecret = str(config['apiSecret'])
 trade = config['trade']
 currency = config['currency']
-valuePercent = config['valuePercent']
+sellValuePercent = config['sellValuePercent']
+buyValuePercent = config['buyValuePercent']
 volumePercent = config['volumePercent']
 extCoinBalance = config['extCoinBalance']
 checkInterval = config['checkInterval']
@@ -83,16 +85,16 @@ def get_last_order_value(market):
     lastOrder = api.getorderhistory(market, 0)
     return lastOrder[0]['PricePerUnit']
 
-def calculate_sell_order_value(orderHistory, valuePercent):
-    newSellValue = round((orderHistory * (valuePercent * .01)) + orderHistory, 8)
+def calculate_sell_order_value(orderHistory, sellValuePercent):
+    newSellValue = round((orderHistory * (sellValuePercent * .01)) + orderHistory, 8)
     return newSellValue
 
 def calculate_sell_order_volume(orderVolume, volumePercent):
     newSellVolume = round(orderVolume * (volumePercent * .01), 8)
     return newSellVolume
 
-def calculate_buy_order_value(orderValueHistory, valuePercent):
-    newBuyValue = round(orderValueHistory - (orderValueHistory * (valuePercent * .01)), 8)
+def calculate_buy_order_value(orderValueHistory, buyValuePercent):
+    newBuyValue = round(orderValueHistory - (orderValueHistory * (buyValuePercent * .01)), 8)
     return newBuyValue
 
 def calculate_buy_order_volume(orderVolume, volumePercent):
@@ -127,7 +129,7 @@ while True:
     orderVolume = api.getbalance(currency)['Available'] + extCoinBalance
 
     if (sellControl == 0):
-        newSellValue = calculate_sell_order_value(orderValueHistory, valuePercent)
+        newSellValue = calculate_sell_order_value(orderValueHistory, sellValuePercent)
         newSellVolume = calculate_sell_order_volume(orderVolume, volumePercent)
         print "Currency: " + currency
         print "Sell Value: " + str(newSellValue)
@@ -136,7 +138,7 @@ while True:
         print result
 
     if (buyControl == 0):
-        newBuyValue = calculate_buy_order_value(orderValueHistory, valuePercent)
+        newBuyValue = calculate_buy_order_value(orderValueHistory, buyValuePercent)
         newBuyVolume = calculate_buy_order_volume(orderVolume, volumePercent)
         print "Currency: " + currency
         print "Buy Value: " + str(newBuyValue)
