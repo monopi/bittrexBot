@@ -2,7 +2,6 @@
 __author__ = 'zaphodbeeblebrox'
 
 # TODO
-# add the buy percentage
 # add an initial market check
 # figure out how the hell Wilde's assessing volume
 # note the code
@@ -113,13 +112,38 @@ def check_for_recent_transaction(market, orderInventory):
         reset_orders(orderInventory)
         time.sleep(5)
 
-
 def reset_orders(orderInventory):
     for order in orderInventory:
         print "Removing order: " + order['OrderUuid']
         api.cancel(order['OrderUuid'])
 
+def get_initial_market_value(market):
+    currentValue = api.getmarketsummary(market)
+    currentValue = currentValue[0]['Last']
+    return currentValue
 
+def set_initial_buy(currentValue, buyValuePercent, orderVolume, market):
+    newBuyValue = round(currentValue - (currentValue * (buyValuePercent * .01)), 8)
+    newBuyVolume = round((orderVolume * (volumePercent * .01)), 8)
+    result = api.buylimit(market, newBuyVolume, newBuyValue)
+    print result
+
+def set_initial_sell(currentValue, sellValuePercent, orderVolume, market):
+    newSellValue = round((currentValue * (sellValuePercent * .01)) + currentValue, 8)
+    newSellVolume = round(orderVolume * (volumePercent * .01), 8)
+    result = api.selllimit(market, newSellVolume, newSellValue)
+    print result
+
+
+#setting buy / sells during startup to avoid crap selling
+currentValue = get_initial_market_value(market)
+orderInventory = get_orders(market) #prepare to reset orders
+reset_orders(orderInventory)
+time.sleep(5)
+orderVolume = api.getbalance(currency)['Available'] + extCoinBalance
+set_initial_buy(currentValue, buyValuePercent, orderVolume, market)
+set_initial_sell(currentValue, sellValuePercent, orderVolume, market)
+time.sleep(5)
 while True:
     orderInventory = get_orders(market)
     check_for_recent_transaction(market, orderInventory)
