@@ -33,6 +33,8 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
 
 #### Note on Bittrex Transactions: If the transaction is less than .0005 sat, bittrex will ignore the order. So if you have a low volume of cheap tokens you'll have to leverage more volume.
 
+The percentage values are actual percentages...not decimals. So if you want to trade 3.25% you would input 3.25 in that value. I would also not recommend going below 20 seconds for the checkInterval. Otherwise, it's possible to induce a race condition with bittrex.
+
 #### Example file 
 
 ```json
