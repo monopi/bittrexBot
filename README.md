@@ -26,7 +26,8 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
 * trade - the base token used for exchange
 * currency - the token ticker to be traded
 * valuePercent - the difference in the buy / sell price of the order placed
-* volumePercent - how many tokens are traded during a transaction
+* sellVolumePercent - how many tokens are traded during a transaction
+* buyVolumePercent - how many tokens to purchase. Set this number higher than the sellVolumePercent to accumulate more tokens...set it lower to purge tokens
 * extCoinBalance - off exchange token count
 * checkInterval - how often the bot will check for orders
 
@@ -39,7 +40,8 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
   "trade": "BTC",
   "currency": "WAVES",
   "valuePercent": 4,
-  "volumePercent": 3,
+  "sellVolumePercent": 3,
+  "buyVolumePercent": 3,
   "extCoinBalance": 0,
   "checkInterval": 30
 }
