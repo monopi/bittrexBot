@@ -35,6 +35,8 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
 
 The percentage values are actual percentages...not decimals. So if you want to trade 3.25% you would input 3.25 in that value. I would also not recommend going below 20 seconds for the checkInterval. Otherwise, it's possible to induce a race condition with bittrex.
 
+#### Fees notice: The configurations currently do not take into account Bittrex's .0025% fee. This is planned for a later interation.
+
 #### Example file 
 
 ```json
