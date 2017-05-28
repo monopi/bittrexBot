@@ -93,7 +93,7 @@ def calculate_sell_order_volume(orderVolume, sellVolumePercent):
     return newSellVolume
 
 def calculate_buy_order_value(orderValueHistory, valuePercent):
-    newBuyValue = round(orderValueHistory - (orderValueHistory * (buyValuePercent * .01)), 8)
+    newBuyValue = round(orderValueHistory - (orderValueHistory * (valuePercent * .01)), 8)
     return newBuyValue
 
 def calculate_buy_order_volume(orderVolume, buyVolumePercent):

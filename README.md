@@ -19,7 +19,7 @@ Example: if the last order in your orderbook was a sell for .0001000, the bot wi
 
 ## Configuration
 
-#### Note: An api key will need to be created with "Trade Market" permissions
+#### Note: An api key will need to be created with "Trade Limit" permissions
 
 * apiKey - api key
 * apiSecret - api key secret
