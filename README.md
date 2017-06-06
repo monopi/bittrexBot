@@ -15,7 +15,8 @@ This is an experimental bot for trading against the bittrex exchange
 * apiSecret - api key secret
 * trade - the base token used for exchange
 * currency - the token ticker to be traded
-* valuePercent - the difference in the buy / sell price of the order placed
+* sellValuePercent - the difference in the sell price of the previous order completed
+* buyValuePercent - the difference in the buy price of the previous order completed
 * sellVolumePercent - how many tokens are traded during a transaction
 * buyVolumePercent - how many tokens to purchase. Set this number higher than the sellVolumePercent to accumulate more tokens...set it lower to purge tokens
 * extCoinBalance - off exchange token count
