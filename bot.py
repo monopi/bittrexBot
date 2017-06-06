@@ -20,7 +20,8 @@ apiKey = str(config['apiKey'])
 apiSecret = str(config['apiSecret'])
 trade = config['trade']
 currency = config['currency']
-valuePercent = config['valuePercent']
+sellValuePercent = config['sellValuePercent']
+buyValuePercent = config['buyValuePercent']
 buyVolumePercent = config['buyVolumePercent']
 sellVolumePercent = config['sellVolumePercent']
 extCoinBalance = config['extCoinBalance']
@@ -84,16 +85,16 @@ def get_last_order_value(market):
     lastOrder = api.getorderhistory(market, 0)
     return lastOrder[0]['PricePerUnit']
 
-def calculate_sell_order_value(orderHistory, valuePercent):
-    newSellValue = round((orderHistory * (valuePercent * .01)) + orderHistory, 8)
+def calculate_sell_order_value(orderHistory, sellValuePercent):
+    newSellValue = round((orderHistory * (sellValuePercent * .01)) + orderHistory, 8)
     return newSellValue
 
 def calculate_sell_order_volume(orderVolume, sellVolumePercent):
     newSellVolume = round(orderVolume * (sellVolumePercent * .01), 8)
     return newSellVolume
 
-def calculate_buy_order_value(orderValueHistory, valuePercent):
-    newBuyValue = round(orderValueHistory - (orderValueHistory * (valuePercent * .01)), 8)
+def calculate_buy_order_value(orderValueHistory, buyValuePercent):
+    newBuyValue = round(orderValueHistory - (orderValueHistory * (buyValuePercent * .01)), 8)
     return newBuyValue
 
 def calculate_buy_order_volume(orderVolume, buyVolumePercent):
@@ -110,7 +111,7 @@ def check_for_recent_transaction(market, orderInventory):
 
     if difference.total_seconds() < checkInterval:
         reset_orders(orderInventory)
-        time.sleep(5)
+        time.sleep(2)
 
 def reset_orders(orderInventory):
     for order in orderInventory:
@@ -122,14 +123,14 @@ def get_initial_market_value(market):
     currentValue = currentValue[0]['Last']
     return currentValue
 
-def set_initial_buy(currentValue, buyVolumePercent, orderVolume, market, valuePercent):
-    newBuyValue = round(currentValue - (currentValue * (valuePercent * .01)), 8)
+def set_initial_buy(currentValue, buyVolumePercent, orderVolume, market, buyValuePercent):
+    newBuyValue = round(currentValue - (currentValue * (buyValuePercent * .01)), 8)
     newBuyVolume = round((orderVolume * (buyVolumePercent * .01)), 8)
     result = api.buylimit(market, newBuyVolume, newBuyValue)
     print result
 
-def set_initial_sell(currentValue, sellVolumePercent, orderVolume, market, valuePercent):
-    newSellValue = round((currentValue * (valuePercent * .01)) + currentValue, 8)
+def set_initial_sell(currentValue, sellVolumePercent, orderVolume, market, sellValuePercent):
+    newSellValue = round((currentValue * (sellValuePercent * .01)) + currentValue, 8)
     newSellVolume = round(orderVolume * (sellVolumePercent * .01), 8)
     result = api.selllimit(market, newSellVolume, newSellValue)
     print result
@@ -139,11 +140,11 @@ def set_initial_sell(currentValue, sellVolumePercent, orderVolume, market, value
 currentValue = get_initial_market_value(market)
 orderInventory = get_orders(market) #prepare to reset orders
 reset_orders(orderInventory)
-time.sleep(5)
+time.sleep(2)
 orderVolume = api.getbalance(currency)['Available'] + extCoinBalance
-set_initial_buy(currentValue, buyVolumePercent, orderVolume, market, valuePercent)
-set_initial_sell(currentValue, sellVolumePercent, orderVolume, market, valuePercent)
-time.sleep(5)
+set_initial_buy(currentValue, buyVolumePercent, orderVolume, market, buyValuePercent)
+set_initial_sell(currentValue, sellVolumePercent, orderVolume, market, sellValuePercent)
+time.sleep(2)
 while True:
     orderInventory = get_orders(market)
     check_for_recent_transaction(market, orderInventory)
@@ -153,7 +154,7 @@ while True:
     orderVolume = api.getbalance(currency)['Available'] + extCoinBalance
 
     if (sellControl == 0):
-        newSellValue = calculate_sell_order_value(orderValueHistory, valuePercent)
+        newSellValue = calculate_sell_order_value(orderValueHistory, sellValuePercent)
         newSellVolume = calculate_sell_order_volume(orderVolume, sellVolumePercent)
         print "Currency: " + currency
         print "Sell Value: " + str(newSellValue)
@@ -162,7 +163,7 @@ while True:
         print result
 
     if (buyControl == 0):
-        newBuyValue = calculate_buy_order_value(orderValueHistory, valuePercent)
+        newBuyValue = calculate_buy_order_value(orderValueHistory, buyValuePercent)
         newBuyVolume = calculate_buy_order_volume(orderVolume, buyVolumePercent)
         print "Currency: " + currency
         print "Buy Value: " + str(newBuyValue)
